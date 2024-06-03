@@ -162,6 +162,7 @@ class FloppaClient {
         var onHypixel: Boolean  by LocationManager::onHypixel
         var inSkyblock: Boolean  by LocationManager::inSkyblock
         var inDungeons: Boolean  by LocationManager::inDungeons
+        var ingarden: Boolean  by LocationManager::ingarden
         /**
          * Keeps track of elapsed ticks, gets reset at 20
          */

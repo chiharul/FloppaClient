@@ -13,8 +13,12 @@ object LocationManager {
 
     var onHypixel: Boolean = false
     var inSkyblock: Boolean = false
+
     var inDungeons = false
         get() = inSkyblock && field
+    var ingarden = false
+        get() = inSkyblock && field
+
     var currentRegionPair: Pair<Room, Int>? = null
 
     /**
@@ -43,6 +47,13 @@ object LocationManager {
                         }
                     }
                 }
+                if (!ingarden) {
+                    ingarden = inSkyblock && ScoreboardUtils.sidebarLines.any {
+                        ScoreboardUtils.cleanSB(it).run {
+                            (contains("Copper"))
+                        }
+                    }
+                }
             }
             tickRamp = 0
         }
@@ -57,12 +68,14 @@ object LocationManager {
         onHypixel = false
         inSkyblock = false
         inDungeons = false
+        ingarden = false
     }
 
     @SubscribeEvent
     fun onWorldChange(@Suppress("UNUSED_PARAMETER") event: WorldEvent.Unload) {
         inDungeons = false
         inSkyblock = false
+        ingarden = false
         currentRegionPair = null
         tickRamp = 18
     }
