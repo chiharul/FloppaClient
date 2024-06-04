@@ -8,6 +8,7 @@ import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
+import floppaclient.utils.ChatUtils.modMessage
 
 object LocationManager {
 
@@ -53,6 +54,7 @@ object LocationManager {
                             (contains("Copper"))
                         }
                     }
+                    modMessage("§on the garden")
                 }
             }
             tickRamp = 0

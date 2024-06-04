@@ -7,6 +7,7 @@ import floppaclient.module.Module
 import floppaclient.module.settings.impl.BooleanSetting
 import floppaclient.module.settings.impl.ColorSetting
 import floppaclient.module.settings.impl.NumberSetting
+import floppaclient.utils.ChatUtils.modMessage
 import floppaclient.utils.render.WorldRenderUtils
 import floppaclient.utils.render.WorldRenderUtils.drawBoxByEntity
 import net.minecraft.client.Minecraft
@@ -75,10 +76,12 @@ object DungeonESP : Module(
 
     @SubscribeEvent
     fun onRenderWorld(event: RenderWorldLastEvent) {
-        if (!this. enabled || !FloppaClient.ingarden || !FloppaClient.inDungeons) return
+        if (!this. enabled || !FloppaClient.ingarden) return
         mc.theWorld.loadedEntityList.stream()
             .forEach { entity ->
                 val name = StringUtils.stripControlCodes(entity.customNameTag ?: return@forEach)
+                val startPosition = exactLocation(entity, event.partialTicks)
+                val endPosition = exactPlayerEyeLocation(event.partialTicks)
                 when(entity) {
                     is EntityArmorStand -> {
                         if(showStarMobs.enabled && entity.customNameTag.contains("✯")
@@ -123,18 +126,16 @@ object DungeonESP : Module(
                         if (showBat.enabled && !entity.isInvisible) {
                             drawBoxByEntity(entity, colorBat.value, entity.width, entity.height, event.partialTicks,
                                 deaultLineWidth.value.toFloat(), true)
-                            val startPosition = exactLocation(entity, event.partialTicks)
-                            val endPosition = exactPlayerEyeLocation(event.partialTicks)
-                            WorldRenderUtils.drawLine(startPosition, endPosition, colorsilvo.value)
+                            modMessage("§clookin at a bat")
+                            WorldRenderUtils.drawLine(startPosition, endPosition, colorsilvo.value, event.partialTicks)
                         }
                     }
                     is EntitySilverfish -> {
                         if (showsilverfish.enabled && !entity.isInvisible) {
                             drawBoxByEntity(entity, colorsilvo.value, entity.width, entity.height, event.partialTicks,
                                 deaultLineWidth.value.toFloat(), true)
-                            val startPosition = exactLocation(entity, event.partialTicks)
-                            val endPosition = exactPlayerEyeLocation(event.partialTicks)
-                            WorldRenderUtils.drawLine(startPosition, endPosition, colorsilvo.value,   /* other stuff */)
+                            modMessage("§clookin at a silverfish")
+                            WorldRenderUtils.drawLine(startPosition, endPosition, colorsilvo.value, event.partialTicks)
                         }
                     }
                 }
